@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <div class="col">
+        <form action="/compare" enctype="multipart/form-data" method="post">
+
+            <!-- TODO -->
+            <div class="form-group">
+                File 1: <input type="file" name="file1" class="form-control-file">
+                File 2: <input type="file" name="file2" class="form-control-file">
+            </div>
+            <div class="form-group">
+
+                Algorithm:
+                <select name="algorithm" class="form-group">
+                    <option disabled selected>Select</option>
+                    <option value="lines">lines</option>
+                    <option value="sentences">sentences</option>
+                    <option value="substrings">substring</option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                Length (if substrings chosen): <input type="number" min="1" placeholder="length" name="length" >
+            </div>
+            <button type="submit" class="btn btn-primary" action="submit">Compare!</button>
+
+        </form>
+    </div>
+
+{% endblock %}

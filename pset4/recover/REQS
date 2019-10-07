@@ -1,0 +1,60 @@
+Hints:
+- Program should recover all JPEGs from card.raw, storing each as a separate file in pwd.
+- Program should number the files it outputs by naming each ###.jpg, where ### is three-digit decimal number from 000 on up. (befriend sprintf)
+- You need not try to recover the JPEGs' original names. To check JPEGS correct, double-click them, photo should appear intact.
+
+Specs:
+- Implement program which recovers JPEGs from a forensic image.
+- Program should accept exactly ONE cmd-line arg, the NAME of a forensic image from which to recover JPEGs.
+- If your program is not executed with exactly one command-line argument (argc != 1), it should remind the user of correct usage, as with fprintf (to stderr), and main should return 1.
+- If the forensic image cannot be opened for reading, your program should inform the user as much, as with fprintf (to stderr), and main should return 2.
+- If program uses malloc, it must not leak any memory.
+
+Steps:
+- Open memory card file (fopen)
+- Detect beginning of jpeg
+
+Read until EOF
+    read 512 bytes at a time
+    checking header for jpeg each time,
+        yes: check if jpeg alr open
+            yes: CLOSE existing, open new one **
+            no: start first jpeg, open jpeg **
+
+
+
+        no: check if jpeg alr open
+                yes: bytes are part of current jpeg, continue reading
+                no: continue reading next block of 512 bytes
+
+    until reach start of new jpeg
+
+fread(buffer, 1, 512, raw_file) INSTEAD of 512, 1 because when reach EOF less than 512 bytes will be detected
+fread returns how many of size was returned, ideally will be number 512
+use number in a condition
+
+
+Close any remaining files
+
+- Open new jpeg file
+
+make new JPEG
+sprintf(filename, "%03i.jpg", 2)
+filename: char array to store resultant string e.g 002.jpg
+
+int count = 0
+sprintf(filename, "%03i.jpg", count)
+count ++
+
+FILE* img = fopen(filename, "w")
+
+
+
+- Write 512 bytes to jpeg until new file is found
+
+fwrite(data, size, qty, fileptr)
+data: pointer to struct that contains the bytes you are reading from
+fwrite(raw_file, sizeof(byte), 512, img)
+
+
+- Detect end of file

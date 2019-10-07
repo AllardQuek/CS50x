@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+
+<script>
+    $(document).ready(function() {
+
+    $('#datatable').DataTable({
+    select: true
+    });
+
+    } );
+
+</script>
+
+
+<table id="datatable" class="table table-bordered table-hover">
+    <caption> CAPTION: Survey participant's info </caption>
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Interest</th>
+            <th scope="col">Gender</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for row in infolist %}
+        <tr>
+            <td>{{ row['name'] }}</td>
+            <td>{{ row['interest'] }}</td>
+            <td>{{ row['gender'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}

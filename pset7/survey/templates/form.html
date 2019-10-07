@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <!-- http://getbootstrap.com/docs/4.1/content/typography/ -->
+    <h1 class="mb-3">Form</h1>
+
+    <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
+    <form action="/form" method="post" class="needs-validation" novalidate>
+
+        <!-- TODO -->
+        <div class="form-group">
+
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstname" class="form-control" placeholder="First Name" autofocus required>
+            <div class="invalid-feedback">
+                Please provide valid input.
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" name="lastname" class="form-control" placeholder="Last Name" required>
+            <div class="invalid-feedback">
+                Please provide valid input.
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control form-control-sm" name="email" placeholder="name@example.com" required>
+                <div class="invalid-feedback">
+                    Please provide valid input.
+                </div>
+            </div>
+
+            <div class="form-group col">
+                <label for="gender">Gender</label>
+                <select class="form-control form-control-sm" name="gender" required>
+                    <option disabled selected value>Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please provide valid input.
+                </div>
+            </div>
+
+            <div class="form-group col">
+                <label for="work">Who are you?</label>
+                <select class="form-control form-control-sm" name="work" required>
+                    <option disabled selected value="">Select</option>
+                    <option>Student</option>
+                    <option>Undergraduate</option>
+                    <option>Working Adult</option>
+                    <option>Others</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please provide valid input.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" required>
+            <font size="+1">Age Group:</font><br>
+            <input type="radio" name="agegroup"> Below 20 <br>
+            <input type="radio" name="agegroup"> 20 to 29 <br>
+            <input type="radio" name="agegroup"> 30 to 45 <br>
+            <input type="radio" name="agegroup"> Above 45 <br>
+            <div class="invalid-feedback">
+                Please provide valid input.
+            </div>
+        </div>
+
+
+        <div class="form-group" required>
+            <font size="+1">Interests</font><br>
+
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="sports" name="interest" value="Sports">
+                <label class="custom-control-label" for="sports">Sports</label>
+            </div>
+
+
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="music" name="interest" value="Music">
+                <label class="custom-control-label" for="music">Music</label>
+            </div>
+
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="reading" name="interest" value="Reading">
+                <label class="custom-control-label" for="reading">Reading</label>
+            </div>
+
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="gaming" name="interest" value="Gaming">
+                <label class="custom-control-label" for="gaming">Gaming</label>
+            </div>
+
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="computing" name="interest" value="Computing">
+                <label class="custom-control-label" for="computing">Computing</label>
+            </div>
+
+            <div class="invalid-feedback">
+                Please provide valid input.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <font size="+1">About Me:</font><br>
+            <textarea name="aboutme" class="form-control" style="height:100%; width:100%" required></textarea>
+            <br>
+            <div class="invalid-feedback">
+                Please provide valid input.
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="question">On a scale of 0 to 10, how much do you like programming?</label>
+            <input type="range" name="question" class="custom-range" min="0" max="10" required>
+        </div>
+
+
+        <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <button class="btn btn-warning" type="reset">Reset</button>
+
+
+    </form>
+
+    <script>
+        /* Add JavaScript code that prevents users from submitting the form if they have not provided values for one or more fields, alerting the user accordingly --> */
+        /* TODO (BTW JS code uses "/*" for comments, not "<!--" which is for HTML */
+
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+          }, false);
+        })();
+    </script>
+
+{% endblock %}

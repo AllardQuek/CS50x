@@ -1,0 +1,155 @@
+Hints; what does it means to resize a BMP: **
+- Assume that n times the size of infile will not exceed 232 - 1.) ; i.e bf.bfSize * n < (232 - 1)
+- Decide which of the fields in  BITMAPFILEHEADER and BITMAPINFOHEADER you might need to modify.
+- Support case where n = 1, the result of which should be an outfile with dimensions identical to infile's.
+
+Specs:
+- Implement a program called resize that resizes 24-bit uncompressed BMPs by a factor of n.
+- Program should accept exactly 3 cmd-line args, whereby #?
+    - the first (n)  where (n > 0 && n <= 100)
+    - the second must be the name of a BMP to be resized, and
+    - the third must be the name of the resized version to be written.
+    - If your program is not executed with such, it should remind the user of correct usage, as with fprintf (to stderr), and main should return 1.
+- If your program uses malloc, it must not leak any memory; i.e free() once done using memory. Try using valgrind to check for any leaks! **
+
+
+Steps:
+1) Open file #
+2) Update outfile's header info #
+3) Read infile's scanline pix by pix #
+
+4) Resize horizontally, rmb padding (add/subtract padding to scanlines) **
+5) Resize vertically **
+
+6) Write into outfile pix by pix #
+
+
+OLD:
+bi.biWidth =
+bi.biHeight =
+bi.biSizeImage =
+bi.biSize =
+padding = (dependent on bi.biWidth)
+
+NEW:
+bi.biWidth *= n
+bi.biHeight *= n
+bi.biSizeImage = ???
+bi.biSize = ???
+padding = ???
+
+
+
+
+for each row in infile
+    for each pixel
+        write to array n times
+    for another n times (vertically)
+        write array (hori line) to outfile
+        add padding to outfile
+    skip over infile padding (i.e fseek over infile padding)
+
+
+
+    // then add it back (to demonstrate how)
+    for (int k = 0; k < padding; k++)
+    {
+        fputc(0x00, outptr);
+    }
+
+
+
+    BYTE* array = malloc(bi.biWidth * 3);
+    if (array == NULL)
+    {
+        fprintf(stderr, "pointer array assigned NULL pointer, i.e pointing to nothing");
+        return 5;
+    }
+
+
+    // iterate over infile's scanlines, for EACH ROW
+    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+    {
+        // iterate over pixels in scanline, for EACH PIXEL
+        for (int j = 0; j < bi.biWidth; j++)
+        {
+            // temporary storage
+            RGBTRIPLE triple;
+
+            // READ RGB triple from infile
+            fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
+
+            //WRITE to ARRAY n times
+            for (int m = 0; m < n; m++)
+            {
+                // write RGB triple to outfile
+                fwrite(&triple, sizeof(RGBTRIPLE), 1, array);
+            }
+        }
+
+        //for n times, writing the same row taken from array n times, write to OUTfile
+        for (int m = 0; m < n; m++)
+        {
+            fwrite(array, sizeof(RGBTRIPLE), 1, outptr);
+        }
+
+
+        //write OUTfile's PADDING (a NEW padding from previously)
+        for (int k = 0; k < newpadding; k++)
+        {
+            fputc(0x00, outptr);
+        }
+
+        // skip over INfile's padding, if any
+        fseek(inptr, oldpadding, SEEK_CUR);
+        // then move on to next row
+    }
+
+    free(array);
+
+    ---------
+
+
+    //for EACH ROW
+    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+    {
+        //REPEAT n TIMES whatever is nested within:
+        for (int j = 0; j < n; j++)
+        {
+            //for EACH PIXEL in infile, i.e oldwidth
+            for (int k = 0; k < oldbiWidth; k++)
+            {
+                RGBTRIPLE triple;
+
+                // READ RGB triple from infile
+                fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
+
+                //WRITE to OUTfile n times
+                for (int l = 0; l < n; l++)
+                {
+                    // write RGB triple to outfile
+                    fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
+                }
+            }
+
+            //add OUTfile's PADDING (NEW padding)
+            for (int m = 0; m < newpadding; m++)
+            {
+                fputc(0x00, outptr);
+            }
+
+            if (j < n - 1)
+                fseek(inptr, -(oldbiWidth * (int)sizeof(RGBTRIPLE)), SEEK_CUR);
+        }
+
+
+        // once done REPEAT n TIMES
+        // skip over INfile's padding, if any
+        fseek(inptr, oldpadding, SEEK_CUR);
+        // then move on to next row
+    }
+
+
+
+        // if (j < n - 1)
+        //     fseek(inptr, -(oldbiWidth * (int)sizeof(RGBTRIPLE)), SEEK_CUR);

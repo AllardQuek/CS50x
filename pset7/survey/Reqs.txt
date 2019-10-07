@@ -1,0 +1,57 @@
+SPECS
+
+Complete the implementation of templates/form.html:
+- one or more text fields of any type #
+- one or more checkboxes or two or more radio buttons #
+- one or more select menus, each with two or more options #
+- Style form using Bootstrap #
+
+- Add JavaScript code that *prevents users from submitting* the form if they have not provided values for one or more fields, alerting the user accordingly, as via alert or Bootstrap. #
+
+
+Complete the implementation of post_form:
+- VALIDATE a form’s submission, alerting users with a message via error.html if they have NOT PROVIDED values for one or more fields, just in case your JavaScript code let something through (or was disabled) #
+- WRITE the form’s values to a new row in survey.csv using csv.writer or csv.DictWriter, and #
+- REDIRECT user to /sheet. #
+
+Complete the implementation of get_sheet:
+- reads past submissions from survey.csv using csv.reader/csv.DictReader and
+- displays those submissions in an HTML table via a new template.
+- Style that table using Bootstrap
+- Optionally enhance the table with JavaScript, as via DataTables.
+
+
+
+NOTES:
+
+# form action="" tells browser where to submit info to i.e. form-handler, method="post/get"
+# class="form-group" arranges components neatly, ensuring they do not stick, easiest way to add some structure to forms; provides a flexible class that encourages proper grouping of labels/controls/optional help text/and form validation messaging.
+# class="form-control" gives the nice lightly outlined box to contain any input
+# use <label></label> to label inputs or use <br> to insert a break/newline
+# all inputs must have a NAME else info will not be submitted, can be of type "text, email, radio, checkbox, number, password, range"
+# options can be: disbaled and/or selected, inner-html is what user sees, value="" is what computer sees
+# <textarea></textarea> provides a textbox for user to write a paragraph
+# class="custom-range" allows bar to fill whole page instead of having a small bar
+# <button></button> can have class="btn btn-primary/secondary/warning", type="submit/reset"
+# For custom Bootstrap form validation messages, you’ll need to add the novalidate boolean attribute to your <form>, class="needs-validation"
+# when checking for valid feedback, maybe include value="" to be exact that inital value is null.
+# Standard way to implement inline checkboxes:
+    <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox">
+          <label class="form-check-label">1</label>
+    </div>
+# Using Javascript alert to validate input:
+    document.querySelector('form').onsubmit = function() {
+        if (!document.querySelector('input').value) {
+            alert('Please provide valid input!');
+            return false;
+        }
+        else if (!document.querySelector('select').value {
+            alert('Please select an answer!');
+            return false;
+        }
+        return true;
+    };
+
+
+# CHECK HTML SYNTAX: https://validator.w3.org/#validate_by_input

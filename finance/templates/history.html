@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <script>
+        $(document).ready(function() {
+
+        $('#datatable').DataTable({
+        select: true
+        });
+
+        } );
+
+    </script>
+
+
+    <table id="#datatable" class="table table-bordered table-hover">
+        <caption>Transaction History</caption>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">No.</th>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>DateTime</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row["purchase_id"]}}</td>
+                <td>{{ row["symbol"]}}</td>
+                <td>{{ row["shares"]}}</td>
+                <td>{{ row["price"]}}</td>
+                <td>{{ row["total"]}}</td>
+                <td>{{ row["datetime"]}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+{% endblock %}
